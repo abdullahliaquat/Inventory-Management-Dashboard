@@ -1,0 +1,140 @@
+import React from "react";
+import type { CreateProduct } from "../types";
+import { useState } from "react";
+import {X} from "lucide-react";
+
+interface AddProductModalProp {
+  isOpen: boolean;
+  onClose: () => void;
+  onSubmit: (payload: CreateProduct) => void;
+}
+
+const AddProduct = ({ isOpen, onClose, onSubmit }: AddProductModalProp) => {
+  const [formData, setformdata] = useState({
+    sku: " ",
+    name: " ",
+    currentStock: " ",
+  });
+  const [errors, setErros] = useState<Record<string, string>>({});
+
+  const validateform = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (!formData.sku.trim()) newErrors.sku = "Sku is required";
+    if (!formData.name.trim()) newErrors.name = "Name is required.";
+    if (!formData.currentStock.trim())
+      newErrors.currentStock = "Stock quantity is required.";
+
+    setErros(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }
+    const handlesubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+
+      if (!validateform()) return;
+      onSubmit({
+        sku: formData.sku.trim(),
+        name: formData.name.trim(),
+        currentStock: Number.parseInt(formData.currentStock.trim()),
+      });
+
+      setformdata({ sku: "", name: " ", currentStock: "" });
+      setErros({});
+    };
+
+    if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+      <div className="bg-card bg-black border border-border rounded-lg w-full max-w-sm p-6 max-h-screen overflow-y-auto">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold text-card-foreground">
+            Add Product
+          </h2>
+          <button
+            onClick={onClose}
+            className="text-muted-foreground hover:text-card-foreground transition-colors"
+          >
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+
+        <form onSubmit={handlesubmit} className="space-y-4">
+          <div>
+            <label className="flex text-sm font-semibold text-card-foreground mb-1">
+              SKU
+            </label>
+            <input
+              type="text"
+              value={formData.sku}
+              onChange={(e) =>
+                setformdata({ ...formData, sku: e.target.value })
+              }
+              placeholder="e.g., SKU-001"
+              className="w-full bg-input border border-border rounded px-3 py-2 text-card-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+            />
+            {errors.sku && (
+              <p className="text-destructive text-xs mt-1">{errors.sku}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="flex text-sm font-semibold text-card-foreground mb-1">
+              Product Name
+            </label>
+            <input
+              type="text"
+              value={formData.name}
+              onChange={(e) =>
+                setformdata({ ...formData, name: e.target.value })
+              }
+              placeholder="e.g., Widget A"
+              className="w-full bg-input border border-border rounded px-3 py-2 text-card-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+            />
+            {errors.name && (
+              <p className="text-destructive text-xs mt-1">{errors.name}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="flex text-sm font-semibold text-card-foreground mb-1">
+              Initial Stock
+            </label>
+            <input
+              type="text"
+              min="0"
+              value={formData.currentStock}
+              onChange={(e) =>
+                setformdata({ ...formData, currentStock: e.target.value })
+              }
+              placeholder="0"
+              className="w-full bg-input border border-border rounded px-3 py-2 text-card-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+            />
+            {errors.currentStock && (
+              <p className="text-destructive text-xs mt-1">
+                {errors.currentStock}
+              </p>
+            )}
+          </div>
+
+          <div className="flex gap-2 pt-4">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 bg-red-900 hover:bg-red-800 text-muted-foreground rounded px-4 py-2 font-semibold transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="flex-1 bg-yellow-700 hover:bg-yellow-600 text-white rounded px-4 py-2 font-semibold transition-colors"
+            >
+              Add Product
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+export default AddProduct;
