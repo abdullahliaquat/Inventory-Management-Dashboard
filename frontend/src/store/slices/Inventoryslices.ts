@@ -1,5 +1,10 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { InventoryState, Product, UpdateStock, CreateProduct} from "../../types";
+import type {
+  InventoryState,
+  Product,
+  UpdateStock,
+  CreateProduct,
+} from "../../types";
 
 const initialState: InventoryState = {
   products: [],
@@ -11,7 +16,7 @@ const initialState: InventoryState = {
 
 const inventorySlice = createSlice({
   name: "inventory",
-  initialState, 
+  initialState,
   reducers: {
     fetchProductsRequest: (state) => {
       state.loading = true;
@@ -35,11 +40,11 @@ const inventorySlice = createSlice({
     createProductSuccess: (state, action: PayloadAction<Product>) => {
       state.loading = false;
       state.products.push({
-    id: action.payload.id,
-    sku: action.payload.sku,
-    name: action.payload.name,
-    currentStock: action.payload.currentStock,
-  });
+        id: action.payload.id,
+        sku: action.payload.sku,
+        name: action.payload.name,
+        currentStock: action.payload.currentStock,
+      });
       state.success = "Product created successfully";
     },
     createProductFailure: (state, action: PayloadAction<string>) => {
@@ -50,10 +55,12 @@ const inventorySlice = createSlice({
     updateStockRequest: (state, action: PayloadAction<UpdateStock>) => {
       state.updating = { ...state.updating, [action.payload.productid]: true };
       state.error = null;
-       const index = state.products.findIndex(p => p.id === action.payload.productid);
-  if (index !== -1) {
-    state.products[index].currentStock = action.payload.quantity;
-  }
+      const index = state.products.findIndex(
+        (p) => p.id === action.payload.productid
+      );
+      if (index !== -1) {
+        state.products[index].currentStock = action.payload.quantity;
+      }
     },
     updateStockSuccess: (state, action: PayloadAction<Product>) => {
       const index = state.products.findIndex((p) => p.id === action.payload.id);
@@ -62,7 +69,10 @@ const inventorySlice = createSlice({
         state.updating = { ...state.updating, [action.payload.id]: false };
       }
     },
-    updateStockFailure: (state, action: PayloadAction<{ productId: string; error: string }>) => {
+    updateStockFailure: (
+      state,
+      action: PayloadAction<{ productId: string; error: string }>
+    ) => {
       state.updating = { ...state.updating, [action.payload.productId]: false };
       state.error = action.payload.error;
     },
@@ -76,7 +86,10 @@ const inventorySlice = createSlice({
       state.updating = { ...state.updating, [action.payload]: false };
       state.success = "Product deleted successfully";
     },
-    deleteProductFailure: (state, action: PayloadAction<{ productId: string; error: string }>) => {
+    deleteProductFailure: (
+      state,
+      action: PayloadAction<{ productId: string; error: string }>
+    ) => {
       state.updating = { ...state.updating, [action.payload.productId]: false };
       state.error = action.payload.error;
     },

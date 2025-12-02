@@ -4,7 +4,7 @@ import type { CreateProduct, UpdateStock } from "../../types";
 
 const API_BASE = "http://localhost:5000/api/products";
 
-function* fetchProductsSaga():Generator {
+function* fetchProductsSaga(): Generator {
   try {
     const response: Response = yield call(fetch, API_BASE);
     const data = yield call([response, response.json]);
@@ -15,7 +15,7 @@ function* fetchProductsSaga():Generator {
   }
 }
 
-function* createProductSaga(action: { payload: CreateProduct }):Generator {
+function* createProductSaga(action: { payload: CreateProduct }): Generator {
   try {
     const response: Response = yield call(fetch, API_BASE, {
       method: "POST",
@@ -23,14 +23,22 @@ function* createProductSaga(action: { payload: CreateProduct }):Generator {
       body: JSON.stringify(action.payload),
     });
 
+    if (!response.ok) {
+      const err = yield call([response, response.json]);
+      throw new Error(err.message || "Failed to create product");
+    }
+
     const data = yield call([response, response.json]);
     yield put(actions.createProductSuccess(data));
-  } catch (error) {
-    yield put(actions.createProductFailure("Failed to create product"));
+  } catch (error: any) {
+    yield put(actions.createProductFailure(error.message));
   }
 }
 
-function* updateStockSaga(action: { payload: UpdateStock, type:String }):Generator {
+function* updateStockSaga(action: {
+  payload: UpdateStock;
+  type: String;
+}): Generator {
   try {
     const response: Response = yield call(
       fetch,
