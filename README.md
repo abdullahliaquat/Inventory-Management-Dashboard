@@ -79,3 +79,10 @@ The flow is breifly explained below;
 ![Dashboard](Screenshots/Dashboard.png)
 
 ### Add Product Form
+(Screenshots/Form.png)
+
+### Product Card 
+(Screenshots/Card.png)
+
+### Low Stock and Out of Stock Products
+(Screenshots/Stock.png)
