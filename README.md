@@ -9,55 +9,55 @@ This project is a **Single Page Application (SPA)** for managing warehouse inven
 ### **Backend (Node.js + Express + MongoDB)**
 
 1. Navigate to the backend folder:
-   cd backend
+      cd backend
 
-2. Install Dependencies 
-    npm install
+3. Install Dependencies:
+      npm install
 
-3. Create a .env file in the backend  with the following variables:
-    PORT=5000
-    MONGODBURL=<your_mongodb_connection_string>
+5. Create a .env file in the backend  with the following variables:
+      PORT=5000
+      MONGODBURL=<your_mongodb_connection_string>
 
-4. Start server:
-    node server.js
+6. Start server:
+      node server.js
 
 ### **Front End setup (React + Typescript + Tailwind Redux)**
-1. Navigate to folder
-    cd frontend
+1. Navigate to folder:
+      cd frontend
 
-2. Install dependencies
-     npm install 
+2. Install dependencies:
+      npm install 
 
-3.  Start server 
-    npm run dev
+3.  Start server: 
+      npm run dev
 
 
 ## **2. Redux Workflow**
 
 The flow is breifly explained below;
 
-1. User updates stock
-   The dashboard dispatches;
-    updateStockRequest({ productid, quantity })
+1. User updates stock,
+      The dashboard dispatches;
+          updateStockRequest({ productid, quantity })
  
-2. Saga intercepts the action
-   updateStockSaga listens for this request and performs:
-    PATCH /api/products/:id/stock
+2. Saga intercepts the action,
+      updateStockSaga listens for this request and performs:
+          PATCH /api/products/:id/stock
 
-3. Backend updates Databse 
-   Mongoose updates the product and returns the updated object.
+3. Backend updates Database, 
+      Mongoose updates the product and returns the updated object.
 
-4. Saga dispatches result
-   On success;
-    updateStockSuccess(updatedProduct)
-   On failure;
-    updateStockFailure({ productId, error })
+4. Saga dispatches result,
+      On success;
+          updateStockSuccess(updatedProduct)
+      & On failure;
+          updateStockFailure({ productId, error })
 
-5. Slice updates the redux store
-   The product list is updated, loading flags reset, and errors stored if needed.
+5. Slice updates the redux store,
+      The product list is updated, loading flags reset, and errors stored if needed.
 
 6. React re-renders  automatically
-   Components using useSelector display the latest stock and updated dashboards.
+      Components using useSelector display the latest stock and updated dashboards.
 
 
 ## **3. Design Decision**
@@ -73,3 +73,9 @@ The flow is breifly explained below;
 ### Architecture Choices
     - TypeScript ensures type-safe CRUD operations.
     - Component structure (Dashboard, ProductCard, AddProduct) improves reusability and clarity.
+
+## **4. UI Screehshots
+### Dashboard
+![Dashboard](Screenshots/Dashboard.png)
+
+### Add Product Form
