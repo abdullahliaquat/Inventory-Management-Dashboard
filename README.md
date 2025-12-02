@@ -74,7 +74,7 @@ The flow is breifly explained below;
     - TypeScript ensures type-safe CRUD operations.
     - Component structure (Dashboard, ProductCard, AddProduct) improves reusability and clarity.
 
-## **4. UI Screehshots
+## **4. UI Screehshots**
 ### Dashboard
 ![Dashboard](Screenshots/Dashboard.png)
 
